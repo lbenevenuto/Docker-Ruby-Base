@@ -67,12 +67,6 @@ RUN groupadd -g ${PGID} ${DOCKER_USER} \
     && usermod --shell /bin/zsh root && usermod --shell /bin/zsh --password $(openssl passwd -1 ${PASSWORD}) ${DOCKER_USER}
 RUN echo "${DOCKER_USER} ALL=(ALL) NOPASSWD:ALL" >> /etc/sudoers.d/${DOCKER_USER}
 
-USER ${DOCKER_USER}
-ARG GIT_GLOBAL_USER_EMAIL="luiz@siffra.com.br"
-ARG GIT_GLOBAL_USER_NAME="Luiz Benevenuto"
-RUN git config --global user.email ${GIT_GLOBAL_USER_EMAIL}
-RUN git config --global user.name ${GIT_GLOBAL_USER_NAME}
-
 COPY .p10k.zsh    /root/.p10k.zsh
 COPY .aliases     /root/.aliases
 COPY .tmux.conf   /root/.tmux.conf
@@ -82,13 +76,17 @@ COPY .tmux.conf   /home/${DOCKER_USER}/.tmux.conf
 
 RUN sed -i 's/\r//' /root/.aliases && \
     sed -i 's/\r//' /home/${DOCKER_USER}/.aliases && \
-    chown ${DOCKER_USER}:${DOCKER_USER} /home/${DOCKER_USER}/.aliases && \
+    chown ${DOCKER_USER}:${DOCKER_USER} -R /home/${DOCKER_USER} && \
     echo "" >> ~/.bashrc && \
     echo "# Load Custom Aliases" >> ~/.bashrc && \
     echo "source ~/.aliases" >> ~/.bashrc && \
     echo "" >> ~/.bashrc
 
 USER ${DOCKER_USER}
+ARG GIT_GLOBAL_USER_EMAIL="luiz@siffra.com.br"
+ARG GIT_GLOBAL_USER_NAME="Luiz Benevenuto"
+RUN git config --global user.email ${GIT_GLOBAL_USER_EMAIL}
+RUN git config --global user.name ${GIT_GLOBAL_USER_NAME}
 
 RUN echo "" >> ~/.bashrc && \
     echo "# Load Custom Aliases" >> ~/.bashrc && \
