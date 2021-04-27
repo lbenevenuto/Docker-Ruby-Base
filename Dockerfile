@@ -58,11 +58,13 @@ ENV PUID ${PUID}
 ARG PGID=1000
 ENV PGID ${PGID}
 ARG DOCKER_USER=ruby
-ENV DOCKER_USER=${DOCKER_USER}
+ENV DOCKER_USER ${DOCKER_USER}
 
 USER root
 ENV PASSWORD=123
-RUN usermod --shell /bin/zsh root && usermod --shell /bin/zsh --password $(openssl passwd -1 ${PASSWORD}) ${DOCKER_USER}
+RUN groupadd -g ${PGID} ${DOCKER_USER} \
+    && useradd -l -u ${PUID} -g ${DOCKER_USER} -m ${DOCKER_USER} -G root \
+    && usermod --shell /bin/zsh root && usermod --shell /bin/zsh --password $(openssl passwd -1 ${PASSWORD}) ${DOCKER_USER}
 RUN echo "${DOCKER_USER} ALL=(ALL) NOPASSWD:ALL" >> /etc/sudoers.d/${DOCKER_USER}
 
 USER ${DOCKER_USER}
