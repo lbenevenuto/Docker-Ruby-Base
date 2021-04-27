@@ -20,7 +20,9 @@ ENV LC_ALL=pt_BR.UTF-8
 ENV LC_CTYPE=pt_BR.UTF-8
 ENV LANG=pt_BR.UTF-8
 
-ENV TZ=America/Sao_Paulo
+ARG TZ=America/Sao_Paulo
+ENV TZ ${TZ}
+
 RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
 
 # always run apt update when start and after add new source list, then clean up at end.
@@ -50,9 +52,13 @@ RUN curl -fsSL https://deb.nodesource.com/setup_lts.x | bash - &&  apt-get insta
 RUN curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | apt-key add -
 RUN echo "deb https://dl.yarnpkg.com/debian/ stable main" | tee /etc/apt/sources.list.d/yarn.list && apt update && apt install yarn
 
-ENV PUID 1000
-ENV PGID 1000
-ENV DOCKER_USER=ruby
+# Add a non-root user to prevent files being created with root permissions on host machine.
+ARG PUID=1000
+ENV PUID ${PUID}
+ARG PGID=1000
+ENV PGID ${PGID}
+ARG DOCKER_USER=ruby
+ENV DOCKER_USER=${DOCKER_USER}
 
 USER ${DOCKER_USER}
 ARG GIT_GLOBAL_USER_EMAIL="luiz@siffra.com.br"
