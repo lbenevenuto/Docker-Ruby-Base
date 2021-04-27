@@ -31,7 +31,6 @@ RUN set -xe; \
     apt-get install -yqq \
     apt-utils \
     sudo \
-    libperl-dev \
     tmux \
     xclip \
     curl \
