@@ -60,16 +60,16 @@ ENV PGID ${PGID}
 ARG DOCKER_USER=ruby
 ENV DOCKER_USER=${DOCKER_USER}
 
+USER root
+ENV PASSWORD=123
+RUN usermod --shell /bin/zsh root && usermod --shell /bin/zsh --password $(openssl passwd -1 ${PASSWORD}) ${DOCKER_USER}
+RUN echo "${DOCKER_USER} ALL=(ALL) NOPASSWD:ALL" >> /etc/sudoers.d/${DOCKER_USER}
+
 USER ${DOCKER_USER}
 ARG GIT_GLOBAL_USER_EMAIL="luiz@siffra.com.br"
 ARG GIT_GLOBAL_USER_NAME="Luiz Benevenuto"
 RUN git config --global user.email ${GIT_GLOBAL_USER_EMAIL}
 RUN git config --global user.name ${GIT_GLOBAL_USER_NAME}
-
-USER root
-ENV PASSWORD=123
-RUN usermod --shell /bin/zsh root && usermod --shell /bin/zsh --password $(openssl passwd -1 ${PASSWORD}) ${DOCKER_USER}
-RUN echo "${DOCKER_USER} ALL=(ALL) NOPASSWD:ALL" >> /etc/sudoers.d/${DOCKER_USER}
 
 COPY .p10k.zsh    /root/.p10k.zsh
 COPY .aliases     /root/.aliases
