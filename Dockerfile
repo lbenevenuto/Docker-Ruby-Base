@@ -130,6 +130,8 @@ RUN echo "" >> ~/.zshrc && echo "export PATH=\"$(yarn global bin):$PATH\"" >> ~/
 
 USER root
 
+RUN gem install rails
+
 # Clean up
 RUN apt-get clean && \
     rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* && \
