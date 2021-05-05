@@ -130,7 +130,7 @@ RUN echo "" >> ~/.zshrc && echo "export PATH=\"$(yarn global bin):$PATH\"" >> ~/
 
 USER root
 
-RUN gem install rails
+RUN gem install rails rake
 
 # Clean up
 RUN apt-get clean && \
