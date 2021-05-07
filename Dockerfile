@@ -44,6 +44,8 @@ RUN set -xe; \
     zsh-syntax-highlighting \
     powerline \
     fonts-powerline \
+    cmake \
+    postgresql-client postgresql-dev \
     build-essential openssl libssl-dev sqlite3 exa
 
 
@@ -130,7 +132,7 @@ RUN echo "" >> ~/.zshrc && echo "export PATH=\"$(yarn global bin):$PATH\"" >> ~/
 
 USER root
 
-RUN gem install rails rake
+RUN gem install rails rake bundler
 
 # Clean up
 RUN apt-get clean && \
