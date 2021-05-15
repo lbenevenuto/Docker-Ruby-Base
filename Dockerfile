@@ -45,7 +45,7 @@ RUN set -xe; \
     powerline \
     fonts-powerline \
     cmake \
-    postgresql-client postgresql-dev \
+    postgresql-client libpq-dev \
     build-essential openssl libssl-dev sqlite3 exa
 
 
